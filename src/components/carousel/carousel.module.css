@@ -1,0 +1,17 @@
+.profit{
+    display: block;
+  color: yellow;
+  font-weight: 500;
+}
+.link{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+  
+}
+
+.symbol{
+    color: #fff;
+}
