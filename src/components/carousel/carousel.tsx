@@ -1,10 +1,10 @@
-import axios from 'axios';
-import { FC, useEffect, useState } from 'react';
-import AliceCarousel from 'react-alice-carousel';
-import { Link } from 'react-router-dom';
-import { TrendingCoins } from '../../config';
-import { useCrypto } from '../../context';
-import styles from './carousel.module.css';
+import axios from "axios";
+import { FC, useEffect, useState } from "react";
+import AliceCarousel from "react-alice-carousel";
+import { Link } from "react-router-dom";
+import { TrendingCoins } from "../../config";
+import { useCrypto } from "../../context";
+import styles from "./carousel.module.css";
 
 const Carousel: FC = () => {
   const { currency, symbol } = useCrypto();
@@ -14,6 +14,7 @@ const Carousel: FC = () => {
   const getData = async () => {
     const { data } = await axios.get(TrendingCoins(currency));
     setCoins(data);
+    console.log(data);
   };
 
   useEffect(() => {
@@ -27,14 +28,14 @@ const Carousel: FC = () => {
         <img
           src={coin?.image}
           alt={coin?.name}
-          height='80'
+          height="80"
           style={{ marginBottom: 10 }}
         />
         <span className={styles.profit}>
           {coin?.symbol}
           &nbsp;
-          <span style={{ color: profit ? 'green' : 'yellow' }}>
-            {profit && '+'}
+          <span style={{ color: profit ? "green" : "yellow" }}>
+            {profit && "+"}
             {coin?.price_change_percentage_24h.toFixed(2)}%
           </span>
         </span>
