@@ -1,0 +1,10 @@
+.rank {
+  font-size: 20px;
+  font-weight: normal;
+  color: #999;
+}
+
+.desc {
+  text-align: justify;
+  color: rgb(251, 251, 10, 0.63);
+}

@@ -1,8 +1,9 @@
-.currency{
-    color:rgb(219, 219, 44);
+.currency {
+  color: rgb(219, 219, 44);
+  text-decoration: none;
+  font-weight: bolder;
 }
 
-.select{
-    background-color: rgb(219, 219, 44);
-
+.select {
+  background-color: rgb(219, 219, 44);
 }

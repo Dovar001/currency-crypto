@@ -1,10 +1,14 @@
 const CoinList = (currency: string) =>
   `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=market_cap_desc&per_page=100&page=1&sparkline=false`;
 
-const SingleCoin = (id: string) =>
+const SingleCoin = (id: string | undefined) =>
   `https://api.coingecko.com/api/v3/coins/${id}`;
 
-const HistoricalChart = (id: string, days = 365, currency: string) =>
+const HistoricalChart = (
+  id: string | undefined,
+  days = 365,
+  currency: string
+) =>
   `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}`;
 
 const TrendingCoins = (currency: string) =>

@@ -15,7 +15,7 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Main />} />
-            <Route path="/currency/:id" element={<Currency />} />
+            <Route path="/coins/:id" element={<Currency />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
