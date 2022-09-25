@@ -1,6 +1,10 @@
 import {
   Avatar,
+  createTheme,
   Grid,
+  makeStyles,
+  Pagination,
+  PaginationItem,
   Stack,
   Table,
   TableBody,
@@ -8,22 +12,27 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
+import { color } from "@mui/system";
 import axios from "axios";
-import { FC, useEffect, useState } from "react";
-import { TrendingCoins } from "../../config";
+import React, { FC, ReactEventHandler, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { CoinList, TrendingCoins } from "../../config";
 import { useCrypto } from "../../context";
 import { StyledTableCell, StyledTableRow } from "../styled-table/styled-table";
 
 const MainInfo: FC = () => {
-  var nf = new Intl.NumberFormat();
-
   const { currency, symbol } = useCrypto();
 
   const [coins, setCoins] = useState([]);
 
+  const [search, setSearch] = useState("");
+
+  const [page, setPage] = useState(1);
+
   const getData = async () => {
-    const { data } = await axios.get(TrendingCoins(currency));
+    const { data } = await axios.get(CoinList(currency));
     setCoins(data);
     console.log(data);
   };
@@ -60,8 +69,50 @@ const MainInfo: FC = () => {
     }
   };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
+  };
+
+  const handlePaginationChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+    window.scroll({
+      top: 500,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const data = coins
+    ?.slice((page - 1) * 10, page * 10)
+    ?.filter((coin: any) =>
+      coin?.name?.toLowerCase()?.includes(search?.toLowerCase())
+    );
+
   return (
-    <Grid container color="white" justifyContent="center" marginTop={20}>
+    <Grid
+      container
+      color="white"
+      justifyContent="center"
+      spacing={3}
+      marginTop={20}
+      paddingBottom={10}
+    >
+      <Grid item xs={10}>
+        <TextField
+          value={search}
+          onChange={handleInputChange}
+          variant="outlined"
+          placeholder="Search for crypto ...."
+          color="primary"
+          sx={{
+            input: { color: "white", border: "1px solid rgb(219, 219, 44)" },
+          }}
+          fullWidth
+        />
+      </Grid>
       <Grid item xs={10}>
         <TableContainer>
           <Table>
@@ -78,13 +129,35 @@ const MainInfo: FC = () => {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {coins?.map((coin: any) => (
+              {data?.map((coin: any) => (
                 <StyledTableRow>
                   <StyledTableCell>
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      <Avatar src={coin?.image} />
-                      <span> {coin?.name}</span>
-                      <span>{coin?.symbol}</span>
+                    <Stack
+                      component={Link}
+                      to={`/coins/${coin.id}`}
+                      color="#fff"
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <Avatar
+                        sx={{ height: "60px", width: "60px" }}
+                        src={coin?.image}
+                      />
+                      <Stack>
+                        <span style={{ fontSize: "20px", fontWeight: "bold" }}>
+                          {coin?.symbol}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: "12px",
+                            color: "hsl(0deg 7% 73%)",
+                          }}
+                        >
+                          {coin?.name}
+                        </span>
+                      </Stack>
                     </Stack>
                   </StyledTableCell>
                   <StyledTableCell>
@@ -107,6 +180,24 @@ const MainInfo: FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
+      </Grid>
+      <Grid item xs={10}>
+        <Stack alignItems="center">
+          <Pagination
+            color="primary"
+            count={+(coins?.length / 10).toFixed(0)}
+            onChange={handlePaginationChange}
+            renderItem={(item) => (
+              <PaginationItem
+                sx={{
+                  backgroundColor: "transparent",
+                  color: "rgb(219, 219, 44)",
+                }}
+                {...item}
+              />
+            )}
+          />
+        </Stack>
       </Grid>
     </Grid>
   );
