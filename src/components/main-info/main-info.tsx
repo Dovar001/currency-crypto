@@ -13,6 +13,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Typography,
 } from "@mui/material";
 import { color } from "@mui/system";
 import axios from "axios";
@@ -20,21 +21,31 @@ import React, { FC, ReactEventHandler, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CoinList, TrendingCoins } from "../../config";
 import { useCrypto } from "../../context";
+import { useCoins } from "../../hooks/useCoins";
+import { LinearLoading } from "../linear-loading";
+import { FiInbox } from "react-icons/fi";
 import { StyledTableCell, StyledTableRow } from "../styled-table/styled-table";
 
 const MainInfo: FC = () => {
   const { currency, symbol } = useCrypto();
-
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const [coins, setCoins] = useState([]);
 
   const [search, setSearch] = useState("");
 
   const [page, setPage] = useState(1);
 
+  const { getCoinList } = useCoins();
+
   const getData = async () => {
-    const { data } = await axios.get(CoinList(currency));
+    setLoading(true);
+    const { data, error } = await getCoinList(currency);
+    if (error) {
+      setError(error.message);
+    }
     setCoins(data);
-    console.log(data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -85,7 +96,7 @@ const MainInfo: FC = () => {
     });
   };
 
-  const data = coins
+  const data: any[] = coins
     ?.slice((page - 1) * 10, page * 10)
     ?.filter((coin: any) =>
       coin?.name?.toLowerCase()?.includes(search?.toLowerCase())
@@ -177,6 +188,23 @@ const MainInfo: FC = () => {
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
+              {error && <div>{error}</div>}
+              {loading && <LinearLoading />}
+              {!data && !loading && !error && (
+                <StyledTableRow>
+                  <StyledTableCell colSpan={6} component="th" scope="row">
+                    <Stack
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="center"
+                      spacing={2}
+                    >
+                      <FiInbox />
+                      <Typography>No Data!</Typography>
+                    </Stack>
+                  </StyledTableCell>
+                </StyledTableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

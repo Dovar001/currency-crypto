@@ -34,7 +34,7 @@ const Carousel: FC = () => {
         <span className={styles.profit}>
           {coin?.symbol}
           &nbsp;
-          <span style={{ color: profit ? "green" : "yellow" }}>
+          <span style={{ color: profit ? "green" : "red" }}>
             {profit && "+"}
             {coin?.price_change_percentage_24h.toFixed(2)}%
           </span>

@@ -1,4 +1,4 @@
-import { Grid, Typography, Stack } from "@mui/material";
+import { Grid, Typography, Stack, Skeleton } from "@mui/material";
 import axios from "axios";
 import { FC, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -9,19 +9,23 @@ import styles from "./currency.module.css";
 const Currency: FC = () => {
   const { id } = useParams();
 
-  const { currency, symbol } = useCrypto();
+  const { currency } = useCrypto();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [coin, setCoin] = useState<any>();
 
   const getData = async () => {
+    setLoading(true);
     const { data } = await axios.get(SingleCoin(id));
     setCoin(data);
-    console.log(data);
+    setLoading(false);
   };
 
   useEffect(() => {
     getData();
   }, [currency]);
+
+  console.log(loading);
 
   return (
     <Grid height="90.4vh" container>
@@ -34,12 +38,16 @@ const Currency: FC = () => {
         borderRight="2px solid #999"
       >
         <Stack alignItems="center" marginBottom={2} spacing={2}>
-          <img
-            height={250}
-            width={250}
-            src={coin?.image?.large}
-            alt="currency"
-          />
+          {loading ? (
+            <Skeleton variant="circular" height={250} width={250} />
+          ) : (
+            <img
+              height={250}
+              width={250}
+              src={coin?.image?.large}
+              alt="currency"
+            />
+          )}
           <Typography variant="h3" component="h6">
             {coin?.name}
           </Typography>
