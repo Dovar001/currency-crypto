@@ -4,6 +4,7 @@ import { FC, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { HistoricalChart, SingleCoin } from "../../config";
 import { useCrypto } from "../../context";
+import { CoinChart } from "../coin-chart";
 import styles from "./currency.module.css";
 
 const Currency: FC = () => {
@@ -65,8 +66,8 @@ const Currency: FC = () => {
           Market Cap: <span className={styles.rank}>{2}</span>
         </Typography>
       </Grid>
-      <Grid color="white" item xs={8}>
-        2
+      <Grid padding={2} alignSelf="center" color="white" item xs={8}>
+        <CoinChart id={id} />
       </Grid>
     </Grid>
   );

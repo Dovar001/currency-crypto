@@ -22,7 +22,14 @@ const CoinChart: FC<CoinChartProps> = ({ id }) => {
     getData();
   }, [currency]);
 
-  return <div>{JSON.stringify(historyData)}</div>;
+  const hisData = historyData?.slice(1, 20).map((history) => {
+    return {
+      date: `${history[0]}`,
+      value: +history[1],
+    };
+  });
+
+  return <div>1</div>;
 };
 
 export { CoinChart };
