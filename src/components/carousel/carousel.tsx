@@ -1,3 +1,4 @@
+import { CircularProgress } from "@mui/material";
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import AliceCarousel from "react-alice-carousel";
@@ -59,15 +60,19 @@ const Carousel: FC = () => {
 
   return (
     <div>
-      <AliceCarousel
-        mouseTracking
-        infinite
-        autoPlayInterval={1000}
-        disableDotsControls
-        autoPlay
-        responsive={responsive}
-        items={items}
-      />
+      {!coins ? (
+        <CircularProgress style={{ color: "gold" }} size={200} thickness={1} />
+      ) : (
+        <AliceCarousel
+          mouseTracking
+          infinite
+          autoPlayInterval={1000}
+          disableDotsControls
+          autoPlay
+          responsive={responsive}
+          items={items}
+        />
+      )}
     </div>
   );
 };
