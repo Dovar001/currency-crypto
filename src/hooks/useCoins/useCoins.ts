@@ -1,5 +1,10 @@
 import axios from "axios";
-import { CoinList, SingleCoin, TrendingCoins } from "../../config";
+import {
+  CoinList,
+  HistoricalChart,
+  SingleCoin,
+  TrendingCoins,
+} from "../../config";
 
 const useCoins = () => {
   const getCoinList = async (currency: string): Promise<any> => {
@@ -29,7 +34,22 @@ const useCoins = () => {
       return { error };
     }
   };
-  return { getCoinList, getSingleCoin, getTrendingCoins };
+
+  const getHistorycalChart = async (
+    id: string | undefined,
+    days: number,
+    currency: string
+  ): Promise<any> => {
+    try {
+      const res = await axios.get(HistoricalChart(id, days, currency));
+      const data = res.data;
+      return { data };
+    } catch (error) {
+      return { error };
+    }
+  };
+
+  return { getCoinList, getSingleCoin, getTrendingCoins, getHistorycalChart };
 };
 
 export { useCoins };

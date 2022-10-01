@@ -1,4 +1,4 @@
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Stack } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/system";
 import axios from "axios";
 import { FC, useState, useEffect } from "react";
@@ -15,6 +15,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useCoins } from "../../hooks";
 
 interface CoinChartProps {
   id: string | undefined;
@@ -37,13 +38,23 @@ ChartJS.register(
 
 const CoinChart: FC<CoinChartProps> = ({ id }) => {
   const { currency, symbol } = useCrypto();
-  const [days, setDays] = useState<number>(1);
+  const { getHistorycalChart } = useCoins();
 
   const [historyData, setHistoryData] = useState([]);
 
+  const [days, setDays] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
   const getData = async () => {
-    const { data } = await axios.get(HistoricalChart(id, days, currency));
-    setHistoryData(data?.prices);
+    setLoading(true);
+    const { data, error } = await getHistorycalChart(id, days, currency);
+    if (error) {
+      setError(error.message);
+    } else {
+      setHistoryData(data?.prices);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -73,14 +84,22 @@ const CoinChart: FC<CoinChartProps> = ({ id }) => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <div>
-        {!historyData ? (
+      {error && (
+        <Stack alignItems="center" color="#fff">
+          Error happaned:{error}
+        </Stack>
+      )}
+      {loading && (
+        <Stack alignItems="center" justifyContent="center">
           <CircularProgress
             style={{ color: "gold" }}
             size={250}
             thickness={1}
           />
-        ) : (
+        </Stack>
+      )}
+      <div>
+        {!error && !loading && historyData && (
           <>
             <Line
               data={{

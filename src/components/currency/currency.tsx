@@ -38,13 +38,14 @@ const Currency: FC = () => {
   }, [currency]);
 
   return (
-    <Grid height="90.4vh" container>
+    <Grid minHeight={"90.4vh"} height="100%" container>
       <Grid
         padding={2}
         item
         color="white"
         alignSelf="center"
-        xs={4}
+        xs={12}
+        md={4}
         borderRight="2px solid #999"
       >
         {error && <div>Error happaned: {error}</div>}
@@ -55,35 +56,39 @@ const Currency: FC = () => {
             thickness={1}
           />
         )}
-        <Stack alignItems="center" marginBottom={2} spacing={2}>
-          {loading ? (
-            <Skeleton variant="circular" height={250} width={250} />
-          ) : (
-            <img
-              height={250}
-              width={250}
-              src={coin?.image?.large}
-              alt="currency"
-            />
-          )}
-          <Typography variant="h3" component="h6">
-            {coin?.name}
-          </Typography>
-          <Typography className={styles.desc}>
-            {coin?.description?.en?.split(".")[0]}
-          </Typography>
-        </Stack>
-        <Typography variant="h5" component="h1">
-          Rank: <span className={styles.rank}>{coin?.coingecko_rank}</span>
-        </Typography>
-        <Typography variant="h5" component="h1">
-          Current Price: <span className={styles.rank}>{2}</span>
-        </Typography>
-        <Typography variant="h5" component="h1">
-          Market Cap: <span className={styles.rank}>{2}</span>
-        </Typography>
+        {!error && !loading && (
+          <>
+            <Stack alignItems="center" marginBottom={2} spacing={2}>
+              {loading ? (
+                <Skeleton variant="circular" height={250} width={250} />
+              ) : (
+                <img
+                  height={250}
+                  width={250}
+                  src={coin?.image?.large}
+                  alt="currency"
+                />
+              )}
+              <Typography variant="h3" component="h6">
+                {coin?.name}
+              </Typography>
+              <Typography className={styles.desc}>
+                {coin?.description?.en?.split(".")[0]}
+              </Typography>
+            </Stack>
+            <Typography variant="h5" component="h1">
+              Rank: <span className={styles.rank}>{coin?.coingecko_rank}</span>
+            </Typography>
+            <Typography variant="h5" component="h1">
+              Current Price: <span className={styles.rank}>{2}</span>
+            </Typography>
+            <Typography variant="h5" component="h1">
+              Market Cap: <span className={styles.rank}>{2}</span>
+            </Typography>
+          </>
+        )}
       </Grid>
-      <Grid padding={2} alignSelf="center" color="white" item xs={8}>
+      <Grid padding={2} alignSelf="center" color="white" item xs={12} md={8}>
         <CoinChart id={id} />
       </Grid>
     </Grid>
