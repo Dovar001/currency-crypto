@@ -80,10 +80,16 @@ const Currency: FC = () => {
               Rank: <span className={styles.rank}>{coin?.coingecko_rank}</span>
             </Typography>
             <Typography variant="h5" component="h1">
-              Current Price: <span className={styles.rank}>{2}</span>
+              Max Supply:
+              <span className={styles.rank}>
+                {coin?.market_data?.max_supply?.toLocaleString()}
+              </span>
             </Typography>
             <Typography variant="h5" component="h1">
-              Market Cap: <span className={styles.rank}>{2}</span>
+              Market Cap:
+              <span className={styles.rank}>
+                {coin?.market_data?.market_cap["btc"]?.toLocaleString()}
+              </span>
             </Typography>
           </>
         )}
