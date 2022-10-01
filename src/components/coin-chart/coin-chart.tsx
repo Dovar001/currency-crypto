@@ -20,6 +20,11 @@ interface CoinChartProps {
   id: string | undefined;
 }
 
+interface IChartDays {
+  value: number;
+  label: string;
+}
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -33,19 +38,17 @@ ChartJS.register(
 const CoinChart: FC<CoinChartProps> = ({ id }) => {
   const { currency, symbol } = useCrypto();
   const [days, setDays] = useState<number>(1);
-  console.log(days);
-  const [flag, setflag] = useState(true);
 
   const [historyData, setHistoryData] = useState([]);
 
   const getData = async () => {
     const { data } = await axios.get(HistoricalChart(id, days, currency));
     setHistoryData(data?.prices);
-    console.log(data);
   };
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currency, days]);
 
   const darkTheme = createTheme({
@@ -57,7 +60,7 @@ const CoinChart: FC<CoinChartProps> = ({ id }) => {
     },
   });
 
-  const chartDays = [
+  const chartDays: IChartDays[] = [
     { value: 1, label: "1 Days" },
     { value: 30, label: "30 Days" },
     { value: 90, label: "3 Months" },

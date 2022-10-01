@@ -1,32 +1,41 @@
-import { Grid, Typography, Stack, Skeleton } from "@mui/material";
-import axios from "axios";
+import {
+  Grid,
+  Typography,
+  Stack,
+  Skeleton,
+  CircularProgress,
+} from "@mui/material";
 import { FC, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { HistoricalChart, SingleCoin } from "../../config";
 import { useCrypto } from "../../context";
+import { useCoins } from "../../hooks";
 import { CoinChart } from "../coin-chart";
 import styles from "./currency.module.css";
 
 const Currency: FC = () => {
   const { id } = useParams();
-
   const { currency } = useCrypto();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { getSingleCoin } = useCoins();
 
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   const [coin, setCoin] = useState<any>();
 
   const getData = async () => {
     setLoading(true);
-    const { data } = await axios.get(SingleCoin(id));
-    setCoin(data);
+    const { data, error } = await getSingleCoin(id);
+    if (error) {
+      setError(error?.message);
+    } else {
+      setCoin(data);
+    }
     setLoading(false);
   };
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currency]);
-
-  console.log(loading);
 
   return (
     <Grid height="90.4vh" container>
@@ -38,6 +47,14 @@ const Currency: FC = () => {
         xs={4}
         borderRight="2px solid #999"
       >
+        {error && <div>Error happaned: {error}</div>}
+        {loading && (
+          <CircularProgress
+            style={{ color: "gold" }}
+            size={200}
+            thickness={1}
+          />
+        )}
         <Stack alignItems="center" marginBottom={2} spacing={2}>
           {loading ? (
             <Skeleton variant="circular" height={250} width={250} />
