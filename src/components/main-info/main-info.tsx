@@ -50,6 +50,7 @@ const MainInfo: FC = () => {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currency]);
 
   const formatNumber = (inputNumber: any) => {
@@ -141,7 +142,7 @@ const MainInfo: FC = () => {
             </TableHead>
             <TableBody>
               {data?.map((coin: any) => (
-                <StyledTableRow>
+                <StyledTableRow key={coin?.id}>
                   <StyledTableCell>
                     <Stack
                       component={Link}
@@ -188,44 +189,42 @@ const MainInfo: FC = () => {
                   </StyledTableCell>
                 </StyledTableRow>
               ))}
-              {error && <div>{error}</div>}
-              {loading && <LinearLoading />}
-              {!data && !loading && !error && (
-                <StyledTableRow>
-                  <StyledTableCell colSpan={6} component="th" scope="row">
-                    <Stack
-                      direction="column"
-                      justifyContent="center"
-                      alignItems="center"
-                      spacing={2}
-                    >
-                      <FiInbox />
-                      <Typography>No Data!</Typography>
-                    </Stack>
-                  </StyledTableCell>
-                </StyledTableRow>
-              )}
             </TableBody>
           </Table>
+          {error && <Stack>{error}</Stack>}
+          {loading && <LinearLoading />}
+          {!data && !loading && !error && (
+            <Stack
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              spacing={2}
+            >
+              <FiInbox />
+              <Typography>No Data!</Typography>
+            </Stack>
+          )}
         </TableContainer>
       </Grid>
       <Grid item xs={10}>
-        <Stack alignItems="center">
-          <Pagination
-            color="primary"
-            count={+(coins?.length / 10).toFixed(0)}
-            onChange={handlePaginationChange}
-            renderItem={(item) => (
-              <PaginationItem
-                sx={{
-                  backgroundColor: "transparent",
-                  color: "rgb(219, 219, 44)",
-                }}
-                {...item}
-              />
-            )}
-          />
-        </Stack>
+        {data && (
+          <Stack alignItems="center">
+            <Pagination
+              color="primary"
+              count={+(coins?.length / 10).toFixed(0)}
+              onChange={handlePaginationChange}
+              renderItem={(item) => (
+                <PaginationItem
+                  sx={{
+                    backgroundColor: "transparent",
+                    color: "rgb(219, 219, 44)",
+                  }}
+                  {...item}
+                />
+              )}
+            />
+          </Stack>
+        )}
       </Grid>
     </Grid>
   );

@@ -1,4 +1,4 @@
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Stack } from "@mui/material";
 import axios from "axios";
 import { error } from "console";
 import { FC, useEffect, useState } from "react";
@@ -16,6 +16,8 @@ const Carousel: FC = () => {
   const [coins, setCoins] = useState([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  console.log(error);
 
   const getData = async () => {
     setLoading(true);
@@ -69,9 +71,19 @@ const Carousel: FC = () => {
 
   return (
     <div>
-      {error && <div>Error happened:{error}</div>}
+      {error && (
+        <Stack color="#fff" alignItems="center">
+          Error happened:{error}
+        </Stack>
+      )}
       {loading && (
-        <CircularProgress style={{ color: "gold" }} size={200} thickness={1} />
+        <Stack alignItems="center">
+          <CircularProgress
+            style={{ color: "gold" }}
+            size={200}
+            thickness={1}
+          />
+        </Stack>
       )}
       {coins && (
         <AliceCarousel
