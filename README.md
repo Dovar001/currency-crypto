@@ -4,8 +4,7 @@
 
 Cryptocurrency tracker created with **react** and **typescript**.
 
-> > [typescrypt](https://www.typescriptlang.org)
-> > [react](https://ru.reactjs.org/)
+> > [typescrypt](https://www.typescriptlang.org) > > [react](https://ru.reactjs.org/)
 
 ---
 
@@ -24,6 +23,7 @@ For charts used library react-chartsjs-2.
 ---
 
 ###CoinApi
+
 For data used **CoinAPI - Cryptocurrency Data API**
 
 > > [coin-api](https://www.coinapi.io/)
